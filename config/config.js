@@ -10,7 +10,7 @@ export default {
 		zoom: 'zoom.fd.js',
 		notification: 'notification.fd.js',
 		slider: 'slider.fd.js',
-		validation: 'validation.fd.js'
+		rates: 'rates.fd.js'
 	},
 	helper: {
 		event: 'event.hl.js',

@@ -98,7 +98,7 @@ class LighboxModule {
 
 		let image = parent.querySelector("." + this.imgClass);
 
-		wrapper.src = image.src;
+		wrapper.src = image.getAttribute('data-origin');
 		this.parent = parent;
 
 	}
@@ -115,7 +115,7 @@ class LighboxModule {
 		if(!this.parent) return;
 
 		let img	= this.parent.querySelector('img'),
-			template = "<img alt='"+img.alt+"' src='"+img.src+"'>";
+			template = "<img alt='"+img.alt+"' src='"+img.getAttribute('data-origin')+"'>";
 
 		this.openView(template, img.src);
 
