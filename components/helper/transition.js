@@ -1,4 +1,4 @@
-import EventHelper from './event.hl.js';
+import EventHelper from './event.js';
 
 let state = {};
 

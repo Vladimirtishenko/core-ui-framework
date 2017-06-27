@@ -1,5 +1,5 @@
 import Config from './config/config.js';
-import ErrorHelper from './helper/error.hl.js';
+import ErrorHelper from './components/helper/error.js';
 
 class ServiceLocator {
 	constructor(App) {
@@ -25,9 +25,10 @@ class ServiceLocator {
 				this.classes[key] = {};
 				this.registrationModule(config[key], key);
 			} else {
-				let url = (option == 'modules') ? '/' + option + '/' + key + '/' + config[key] : '/' + option + '/' + config[key];
 
-				let module = require(__dirname  +  url).default;
+				let url = (option == 'modules') ? option + '/' + key + '/' + config[key] : option + '/' + config[key];
+
+				let module = require("./components/" + url + '.js').default;
 
 				this.setModule(key, option, module);
 			}

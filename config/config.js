@@ -1,22 +1,22 @@
 export default {
 	modules: {
-		validation: 'validation.fd.js',
-		async: 'asyncLoadContent.fd.js',
-		carousel: 'carousel.fd.js',
-		tab: 'tab.fd.js',
-		accordeon: 'accordeon.fd.js',
-		modal: 'modal.fd.js',
-		lightbox: 'lightbox.fd.js',
-		zoom: 'zoom.fd.js',
-		notification: 'notification.fd.js',
-		slider: 'slider.fd.js',
-		rates: 'rates.fd.js'
+		validation: 'validation',
+		async: 'asyncLoadContent',
+		carousel: 'carousel',
+		tab: 'tab',
+		accordeon: 'accordeon',
+		modal: 'modal',
+		lightbox: 'lightbox',
+		zoom: 'zoom',
+		notification: 'notification',
+		slider: 'slider',
+		rates: 'rates'
 	},
 	helper: {
-		event: 'event.hl.js',
-		css: 'css.hl.js',
-		error: 'error.hl.js',
-		transition: 'transition.hl.js'
+		event: 'event',
+		css: 'css',
+		error: 'error',
+		transition: 'transition'
 	}
 
 }
