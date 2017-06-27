@@ -1,0 +1,64 @@
+.core-links-underline
+	display inline-block
+	margin 0 2px
+	position relative
+	&:before
+		position absolute
+		width 100%
+		height 1px
+		bottom 0
+		left 0
+		content ""
+		background-color #508dcb
+		visibility hidden
+		transform scaleX(0)
+		transition all .2s ease
+	&:hover:before
+		visibility visible
+		will-change transform
+		transform scaleX(1)
+
+.core-links-square
+	display inline-block
+	margin 0 2px
+	position relative
+	&:before
+		margin-right 10px
+		content '['
+		transform translateX(20px)
+		display inline-block
+		opacity 0
+		transition transform 0.3s, opacity 0.2s
+	&:after
+		margin-left 10px
+		content ']'
+		transform translateX(-20px)
+		display inline-block
+		opacity 0
+		transition transform 0.3s, opacity 0.2s
+	&:hover:before,
+	&:hover:after	
+		opacity 1
+		transform translateX(0px)
+		
+
+.core-links-bubling
+	display inline-block
+	margin 0 2px
+	position relative
+	padding-bottom 5px
+	&:before
+		position absolute
+		top 100%
+		left 0
+		width 100%
+		height 1px
+		background #fff
+		content ''
+		opacity 0
+		transition height 0.3s, opacity 0.3s, transform 0.3s
+		transform translateY(-10px)
+	&:hover:before	
+		height 1px
+		opacity 1
+		transform translateY(0px)
