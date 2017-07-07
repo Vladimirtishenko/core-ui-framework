@@ -18,7 +18,7 @@ class ValidationModule {
 		this.state = true;
 		this.params = null;
 
-		for (var i = element.length - 1; i >= 0; i--) {
+		for (var i = 0; i < element.length; i++) {
 			if(!this.checkField(element[i], field, format)){
 				this.state = false;
 				break;
@@ -84,9 +84,10 @@ class ValidationModule {
 	checkField(el, field, format){
 
 		for(let key in field){
+
 			if(key == el.name){
 
-				if(field[key].required && el.value.length < 0){
+				if(field[key].required && el.value.length == 0){
 					el.classList.add(this.invalid);
 					return false;
 				}
