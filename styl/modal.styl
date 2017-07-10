@@ -1,0 +1,25 @@
+.framework-modal
+	width 100%
+	height 100%
+	background rgba(0,0,0, .3)
+	position fixed
+	z-index 9999
+	opacity 0
+	display none
+
+.framework-modal__content-wrapper
+	background #fff
+	
+.framework-modal__close
+	position absolute
+	width 30px
+	height 30px
+	top 7%
+	right 25px
+	display inline-block
+	background-size 100% auto
+	cursor pointer
+	transition .3s
+	z-index 5
+	&:hover
+		transform rotate(90deg)

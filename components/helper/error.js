@@ -1,7 +1,7 @@
 class ErrorHelper {
-	static error(c){
+	static error(c, name){
 		const code = {
-			404: 'Sorry, module not found!'
+			404: 'Sorry, module '+(name || '')+' not found!'
 		}
 
 		return code[c];

@@ -41,7 +41,7 @@ class ServiceLocator {
 		if(this.classes['modules'][name]){
 			return this.classes['modules'][name];
 		} else{
-			throw ErrorHelper.error(404);
+			throw ErrorHelper.error(404, name);
 		}
 	}
 
@@ -49,7 +49,7 @@ class ServiceLocator {
 		if(this.classes['helper'][name]){
 			return this.classes['helper'][name];
 		} else{
-			throw ErrorHelper.error(404);
+			throw ErrorHelper.error(404, name);
 		}
 	}
 
@@ -57,7 +57,7 @@ class ServiceLocator {
 		if(this.app[name]){
 			return this.app[name];
 		} else{
-			throw ErrorHelper.error(404);
+			throw ErrorHelper.error(404, name);
 		}
 	}
 
