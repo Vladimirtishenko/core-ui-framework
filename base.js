@@ -19,6 +19,20 @@
     };
   }
 
+  Array.prototype.random = function(){
+    return this[Math.floor(Math.random() * this.length)];
+  }
+
+  Array.prototype.shuffle = function() {
+    for (let i = this.length - 1; i > 0; i--) {
+      let num = Math.floor(Math.random() * (i + 1));
+      let d = this[num];
+      this[num] = this[i];
+      this[i] = d;
+    }
+    return this;
+  }
+
   window._$ = function(cl, parent) {
     
     let doc = parent || document,
