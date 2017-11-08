@@ -57,10 +57,13 @@ class SliderModule {
 	}
 
 	handlerEvent(event){
-		if(!event || !event.target || event.target.classList.contains('.' + this.options.controlsItemActive)) return;
+		if(!event || !event.target) return;
 
-		let target = event.target,
-			attr = parseInt(target.getAttribute('data-item')),
+		let target = event.target;
+
+		if(!target.getAttribute('data-item') || target.classList.contains('.' + this.options.controlsItemActive)) return;
+
+		let attr = parseInt(target.getAttribute('data-item')),
 			itemHeight = this.options.wrapper.firstElementChild.clientHeight,
 			active = _$('.' + this.options.controlsItemActive);
 
