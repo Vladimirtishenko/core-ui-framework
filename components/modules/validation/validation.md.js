@@ -87,6 +87,10 @@ class ValidationModule {
 
 			if(key == el.name){
 
+				if(field[key] && el.type == 'radio' && !el.checked){
+					return true;
+				}
+
 				if(field[key].required && el.value.length == 0){
 					el.classList.add(this.invalid);
 					return false;
