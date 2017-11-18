@@ -16,8 +16,8 @@ class AccordeonFacade {
 	 * subClass - class for hidden content
 	 */
 
-	getAccordeon(wrapElement, linkClass, subClass){
-		new module(wrapElement, linkClass, subClass, this.$public);
+	getAccordeon(wrapElement, linkClass, subClass, auto){
+		return new module(wrapElement, linkClass, subClass, auto, this.$public);
 	}
 }
 
