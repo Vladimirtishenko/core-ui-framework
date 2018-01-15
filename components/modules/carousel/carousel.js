@@ -9,14 +9,29 @@ import module from './carousel.md.js'
  *
  */
 
+ /**
+  *
+  * Params options
+  * {
+  *		wrap: Element,
+  *		margin: Number,
+  *		direction: String (e.g: translateX),
+  *		preview: Boolean,
+  *		count: Number
+  *		
+  *	}
+  *
+  */
+ 
+
 
 class CarouselFacade {
 	constructor($public) {
 		this.$public = $public;
 	}
 
-	getCarousel(wrap, margin, direction, needPreview, minCount){
-		return new module(wrap, margin, direction, needPreview, minCount, this.$public);
+	getCarousel(options){
+		return new module(options, this.$public);
 	}
 }
 
