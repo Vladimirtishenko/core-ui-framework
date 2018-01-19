@@ -1,3 +1,5 @@
+const MODE = ['circle', 'slide', 'shadow'];
+
 class CarouselModule {
 	constructor(options, $public) {
 			
@@ -11,7 +13,7 @@ class CarouselModule {
 				this.direction = options.direction || 'translateX';
 				this.preview = options.preview || false;
 				this.count = options.count || 4;
-				this.mode = options.mode || 'circle';
+				this.mode = options.mode;
 				this.speed = options.speed || '.3s';
 				this.controls = {
 					state: options.controls && options.controls.state || false, 
@@ -27,18 +29,86 @@ class CarouselModule {
 				this.state = 0;
 		}
 
-		if(!this.props.children || this.props.children.length < 1) return;
-		
-		this.createListWidth();
-		this.previewPresented();
-		this.lengthTryOuts();
-		this.controlsCreate();
-		
-		this.actionsCreator();
+		if(
+			!this.props.children || 
+			 this.props.children.length < 1 ||
+			!this.props.mode ||
+			!this.props.arrows
+		) {
+			return;
+		}
+
+		this.reduce(this.props.mode);
 
 	}
 
-	createListWidth(left, time){
+	reduce(mode){
+
+		switch (mode) {
+
+			case 'slide':
+			case 'circle':
+
+				this.moveSlide();
+				this.previewPresented();
+				this.controlsVisibility();
+
+			case 'slide':
+
+				this.controlsCreate();
+				this.$public.helper('event').flyEvent('add', ['click', ], [this.props.arrows], this.__handlerActionSlide.bind(this));
+				this.$public.helper('event').flyEvent('add', ['click'], [this.props.controls.wrap], this.__controlsHandlerSlide.bind(this));
+
+				break;
+
+			case 'circle':
+
+				this.$public.helper('event').flyEvent('add', ['click'], [this.props.arrows], this.__handlerActionCircle.bind(this));
+
+				break;
+
+			case 'shadow':
+
+				this.controlsVisibility();
+				this.controlsCreate();
+				this.setAbsolute();
+
+				this.$public.helper('event').flyEvent('add', ['click'], [this.props.arrows], this.__handlerActionShadow.bind(this));
+				this.$public.helper('event').flyEvent('add', ['click'], [this.props.controls.wrap], this.__controlsHandlerShadow.bind(this));
+				break;
+
+			default: 
+				return false;
+		}
+
+	}
+
+	setAbsolute(){
+
+		let maxHeight = 0,
+			childrens = [].forEach.call(this.props.children, (item, i)=> {
+					
+					if(item.clientHeight > maxHeight){
+						maxHeight = item.offsetHeight;
+					}
+					if(i != 0){
+						item.style.cssText += "position:absolute; opacity: 0;";
+					} else {
+						item.style.cssText += "position:absolute;";
+					}
+					
+				});
+
+
+
+		this.props.list.style.height = maxHeight+'px';
+		
+	}
+
+
+	moveSlide(left, time){
+
+		console.log(this.props.list);
 
 		let child = this.props.children,
 			firstChild = Array.from( this.props.children ).shift(),
@@ -51,39 +121,43 @@ class CarouselModule {
 	}
 
 	previewPresented(){
+
 		if(!this.props.preview) return;
 
-		this.$public.helper('event').flyEvent('add', ['click'], [this.props.list], this.previewHandler.bind(this));
+		this.$public.helper('event').flyEvent('add', ['click'], [this.props.list], (event) => {
 
-	}
+			if(!event || !event.target || event.target.tagName != 'IMG') return;
 
-	previewHandler(){
-		if(!event || !event.target || event.target.tagName != 'IMG') return;
+			this.props.preview.querySelector('img').src =  event.target.src;
 
-		let src = event.target.src;
-
-		this.props.preview.querySelector('img').src = src;
+		});
 
 	}
 
 	previewSinteticEvent(src){
 		
 		let img = _$('img', this.props.preview);
-
 		img.src = src;
 
 	}
 
-	lengthTryOuts(){
+	controlsVisibility(){
 
-		if(this.props.children.length > this.needCount){
+		if(this.props.children.length > this.props.count){
 			this.props.arrows.style.display = "block"
 		}
 	}
 
+	/**
+	 *
+	 * Dot controls create and action
+	 *
+	 */
+	
+
 	controlsCreate(){
 
-		if(this.props.mode == 'circle' || this.props.count !== 1 || !this.props.controls.state) return;
+		if(this.props.count !== 1 || !this.props.controls.state) return;
 
 		this.props.controls.wrap.innerHTML = "";
 
@@ -95,41 +169,147 @@ class CarouselModule {
 
 		this.props.controls.wrap.innerHTML = dots;
 
-		this.$public.helper('event').flyEvent('add', ['click'], [this.props.controls.wrap], this.controlsHandler.bind(this));
-
 	}
 
-	controlsHandler(event) {
+	__controlsHandlerSlide(event) {
 		if(!event || !event.target || !event.target.getAttribute('data-controls')) return;
 
-		let dot = event.target.getAttribute('data-controls'),
-			child = Array.from( this.props.children ).shift(),
-			offset = (child[this.props.clients.state] + this.props.margin);
+		let props = this.getLocalProps(event);
 
-		this.setActiveClass(event.target);
+		this.__setActiveHandler(event.target);
 
-		this.createListWidth(-(offset * parseInt(dot)), this.props.speed);
+		this.moveSlide(-(props.offset * parseInt(props.attr)), this.props.speed);
 
-		this.props.state = parseInt(dot);
+		this.props.state = parseInt(props.attr);
 	}
 
-	actionsCreator(){
+	__controlsHandlerShadow(event) {
+		if(!event || !event.target || !event.target.getAttribute('data-controls')) return;
 
-		if(this.props.mode == 'circle'){
-			this.$public.helper('event').flyEvent('add', ['click'], [this.props.arrows], this.handlerActionClone.bind(this));
+		let props = this.getLocalProps(event);
+
+		this.__setActiveHandler(event.target);
+
+		this.props.children[this.props.state].style.cssText += "opacity: 0; z-index: 0; transition: .8s";
+
+		this.props.state = parseInt(props.attr);
+
+		this.props.children[this.props.state].style.cssText += "opacity: 1; z-index: 1; transition: .8s";
+		
+	}
+
+	__setActiveHandler(el){
+		if(this.props.count !== 1 || !this.props.controls.state) return;
+
+		_$('.' + this.props.controls.active).classList.remove(this.props.controls.active);
+
+		el.classList.add(this.props.controls.active);
+
+	}
+
+	/* / Dot controls create and action */
+
+	/**
+	 *
+	 * Handler for 'slide' mode
+ 	 *
+	 */
+	
+
+	__handlerActionSlide(event){
+
+		if(!event || !event.target || !event.target.getAttribute('data-controls')) return;
+
+		let props = this.getLocalProps(event);
+
+		this.calculateState(props.attr);
+
+		this.__setActiveHandler(_$('[data-controls="'+this.props.state+'"]'));
+
+		this.moveSlide(-(props.offset * this.props.state), this.props.speed);
+
+	}
+
+	/**
+	 *
+	 * Handler for 'circle' mode
+ 	 *
+	 */
+
+	__handlerActionCircle(event){
+		if(!event || !event.target || !event.target.getAttribute('data-controls')) return;
+
+		let props = this.getLocalProps(event),
+			cloning,
+			cloned;
+
+		if(props.attr == 'next'){
+
+				cloning = this.props.list.firstElementChild;
+				cloned = cloning.cloneNode(true);
+
+				this.props.list.appendChild(cloned);
+				this.moveSlide(-props.offset, this.props.speed);
+
 		} else {
-			this.$public.helper('event').flyEvent('add', ['click'], [this.props.arrows], this.handlerActionSlide.bind(this));
+
+				cloning = this.props.list.lastElementChild;
+				cloned = cloning.cloneNode(true);
+
+				this.moveSlide(-props.offset, '0s');
+
+				window.getComputedStyle(this.props.list).transform;
+
+				this.props.list.insertBefore(cloned, this.props.list.firstElementChild);
+
+				this.moveSlide(0, this.props.speed);
+
 		}
 
+		this.handlerOffset = this.transitionEnd.bind(this, cloning);
+		this.$public.helper('event').flyEvent('add', ['transitionend'], [this.props.list], this.handlerOffset);
+
 	}
 
-	handlerActionSlide(event){
+	__handlerActionShadow(event){
 
 		if(!event || !event.target || !event.target.getAttribute('data-controls')) return;
 
-		let attr = event.target.getAttribute('data-controls'),
-			child = Array.from( this.props.children ).shift(),
-			offset = (child[this.props.clients.state] + this.props.margin);
+		let props = this.getLocalProps(event);
+
+		this.props.children[this.props.state].style.cssText += "opacity: 0; z-index: 0; transition: .8s" 
+
+		this.calculateState(props.attr);
+
+		this.props.children[this.props.state].style.cssText += "opacity: 1; z-index: 1; transition: .8s"
+
+		this.__setActiveHandler(_$('[data-controls="'+this.props.state+'"]'));
+
+	}
+
+	transitionEnd(cloning, event){
+
+		if(event.propertyName == 'transform'){
+				this.moveSlide();
+				this.props.list.removeChild(cloning)
+		
+			this.$public.helper('event').flyEvent('remove', ['transitionend'], [this.props.list], this.handlerOffset);
+		}
+	}
+
+
+	getLocalProps(event){
+
+		let props = {};
+
+		props.attr = event.target.getAttribute('data-controls');
+		props.child = Array.from( this.props.children ).shift();
+		props.offset = (props.child[this.props.clients.state] + this.props.margin);
+
+		return props;
+	}
+
+	calculateState(attr){
 
 		if(attr == 'next'){
 			this.props.state++;
@@ -141,68 +321,6 @@ class CarouselModule {
 			this.props.state = 0;
 		} else if(this.props.state < 0){
 			this.props.state = this.props.children.length - 1;
-		}
-
-		this.setActiveClass(_$('[data-controls="'+this.props.state+'"]'));
-
-		this.createListWidth(-(offset * this.props.state), this.props.speed);
-
-	}
-
-	handlerActionClone(event){
-		if(!event || !event.target || !event.target.getAttribute('data-controls')) return;
-
-		let target = event.target,
-			attr = target.getAttribute('data-controls'),
-			child = Array.from( this.props.children ).shift(),
-			offset = (child[this.props.clients.state] + this.props.margin),
-			cloning,
-			cloned;
-
-
-		if(attr == 'next'){
-
-				cloning = this.props.list.firstElementChild;
-				cloned = cloning.cloneNode(true);
-
-				this.props.list.appendChild(cloned);
-				this.createListWidth(-offset, this.props.speed);
-
-		} else {
-
-				cloning = this.props.list.lastElementChild;
-				cloned = cloning.cloneNode(true);
-
-				this.createListWidth(-offset, '0s');
-
-				window.getComputedStyle(this.props.list).transform;
-
-				this.props.list.insertBefore(cloned, this.props.list.firstElementChild);
-
-				this.createListWidth(0, this.props.speed);
-
-		}
-
-		this.handlerOffset = this.transitionEnd.bind(this, cloning);
-		this.$public.helper('event').flyEvent('add', ['transitionend'], [this.props.list], this.handlerOffset);
-
-	}
-
-	setActiveClass(el){
-		if(this.props.mode == 'circle' || this.props.count !== 1 || !this.props.controls.state) return;
-
-		_$('.' + this.props.controls.active).classList.remove(this.props.controls.active);
-		el.classList.add(this.props.controls.active);
-
-	}
-
-	transitionEnd(cloning, event){
-
-		if(event.propertyName == 'transform'){
-				this.createListWidth();
-				this.props.list.removeChild(cloning)
-		
-			this.$public.helper('event').flyEvent('remove', ['transitionend'], [this.props.list], this.handlerOffset);
 		}
 	}
 
