@@ -14,8 +14,8 @@ class Modal {
 		modal = new module($public);
 	}
 
-	openModal(html){
-		modal.open(html);
+	openModal(html, options){
+		modal.open(html, (options || {}));
 	}
 
 	closeModal(){

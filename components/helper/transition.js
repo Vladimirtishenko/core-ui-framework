@@ -67,7 +67,7 @@ class TransitionHelper {
 
 		EventHelper.flyEvent('remove', ['transitionend'], [state.element], state['method']);
 
-		state.element.removeAttribute('style');
+		state.element.parentNode.removeChild(state.element);
 	}
 
 	/**

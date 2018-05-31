@@ -1,34 +1,41 @@
 import view from './modal.view.js';
 
 class ModalModule {
+
+	static defaultProps() {
+		return {
+			wrapper: 'framework-modal',
+			content: 'framework-modal__content',
+			close: 'framework-modal',
+			view: true,
+			transition: .5
+		}
+	}
+
 	constructor($public){
 		this.$public = $public;
-		this.hideClass = 'framework-modal-none';
 		this.view = view;
 	}
 
-	open(html){
+	open(html, options){
 
-		this.wrapper = _$('.framework-modal');
+		this.props = Object.assign(ModalModule.defaultProps(), options)
+	
+	
+		let view = this.props.view ? this.view.template(html) : html;
+		document.body.insertAdjacentHTML('afterbegin', view);
+
+		this.wrapper = _$('.'+this.props.wrapper);
 		
-		if(this.wrapper){
-			let content = _$('.framework-modal__content' ,this.wrapper);
-			content.innerHTML = html;
-		} else {
-			let view = this.view.template(html);
-			document.body.insertAdjacentHTML('afterbegin', view);
-			this.wrapper = _$('.framework-modal');
-		}
-		
-		this.$public.helper('transition').openTransition(this.wrapper, 'flex', .5, 'opacity: 1');
+		this.$public.helper('transition').openTransition(this.wrapper, 'flex', this.props.transition, 'opacity: 1');
 
 		this.close();
 
 	}
 
-	close(){
+	close(closeButton){
 
-		this.$public.helper('event').flyEvent('add', ['click'], [this.wrapper], () => {
+		this.$public.helper('event').flyEvent('add', ['click'], [_$('.'+this.props.close)], () => {
 			this.$public.helper('transition').closeTransition(this.wrapper, 'none', 'opacity: 0');
 		})
 
