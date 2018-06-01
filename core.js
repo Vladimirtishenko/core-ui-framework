@@ -1,6 +1,10 @@
 'use strict';
+
+import './styl/core.styl'
+
 import base from './base.js';
 import ServiceLocator from './service.js'
+
 
 class Core {
     constructor() {}

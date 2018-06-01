@@ -2,14 +2,12 @@ import view from './modal.view.js';
 
 class ModalModule {
 
-	static defaultProps() {
-		return {
-			wrapper: 'framework-modal',
-			content: 'framework-modal__content',
-			close: 'framework-modal',
-			view: true,
-			transition: .5
-		}
+	static defaultProps = {
+		wrapper: 'framework-modal',
+		content: 'framework-modal__content',
+		close: 'framework-modal',
+		view: true,
+		transition: .5
 	}
 
 	constructor($public){
@@ -19,8 +17,7 @@ class ModalModule {
 
 	open(html, options){
 
-		this.props = Object.assign(ModalModule.defaultProps(), options)
-	
+		this.props = {...ModalModule.defaultProps(), ...options}
 	
 		let view = this.props.view ? this.view.template(html) : html;
 		document.body.insertAdjacentHTML('afterbegin', view);

@@ -6,7 +6,11 @@ class Modal {
 
 	/**
 	 *
-	 * Modal consist of only .framework-modal > .framework-modal__content-wrapper > .framework-modal__close + .framework-modal__content
+	 * Modal consist of only 
+	 *		.framework-modal
+	 *			.framework-modal__content-wrapper 
+	 *				.framework-modal__close
+	 *				.framework-modal__content
 	 *
 	 */
 
@@ -14,8 +18,8 @@ class Modal {
 		modal = new module($public);
 	}
 
-	openModal(html, options){
-		modal.open(html, (options || {}));
+	openModal(html, options = {}){
+		modal.open(html, options);
 	}
 
 	closeModal(){
