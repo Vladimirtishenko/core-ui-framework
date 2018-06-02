@@ -51,23 +51,28 @@ class TransitionHelper {
 
 	}
 
-	static closeTransition(el, display, props){
+	static closeTransition(el, display, props, remove){
 
 		el.style.cssText += props;
 
-		TransitionHelper.setState(el, TransitionHelper.closeTransitionEnd);
+		TransitionHelper.setState(el, TransitionHelper.closeTransitionEnd.bind(null, remove));
 
 		el.style.willChange = 'auto';
 
-		EventHelper.flyEvent('add', ['transitionend'], [el], TransitionHelper.closeTransitionEnd)
+		EventHelper.flyEvent('add', ['transitionend'], [el], state.method)
 
 	}
 
-	static closeTransitionEnd(){
+	static closeTransitionEnd(removed){
 
-		EventHelper.flyEvent('remove', ['transitionend'], [state.element], state['method']);
+		EventHelper.flyEvent('remove', ['transitionend'], [state.element], state.method);
 
-		state.element.parentNode.removeChild(state.element);
+		state.element.removeAttribute('style');
+
+		if(removed) {
+			state.element.parentNode.removeChild(state.element);
+		}
+		
 	}
 
 	/**
