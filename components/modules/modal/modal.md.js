@@ -17,12 +17,14 @@ class ModalModule {
 
 	open(html, options){
 
-		this.props = {...ModalModule.defaultProps(), ...options}
+		this.props = {...ModalModule.defaultProps, ...options};
 	
 		let view = this.props.view ? this.view.template(html) : html;
 		document.body.insertAdjacentHTML('afterbegin', view);
 
 		this.wrapper = _$('.'+this.props.wrapper);
+
+		if(!this.wrapper) return;
 		
 		this.$public.helper('transition').openTransition(this.wrapper, 'flex', this.props.transition, 'opacity: 1');
 
