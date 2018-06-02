@@ -7,7 +7,8 @@ class ModalModule {
 		content: 'framework-modal__content',
 		close: 'framework-modal',
 		view: true,
-		transition: .5
+		transition: .5,
+		remove: true
 	}
 
 	constructor($public){
@@ -35,7 +36,7 @@ class ModalModule {
 	close(closeButton){
 
 		this.$public.helper('event').flyEvent('add', ['click'], [_$('.'+this.props.close)], () => {
-			this.$public.helper('transition').closeTransition(this.wrapper, 'none', 'opacity: 0');
+			this.$public.helper('transition').closeTransition(this.wrapper, 'none', 'opacity: 0', this.props.remove);
 		})
 
 		
