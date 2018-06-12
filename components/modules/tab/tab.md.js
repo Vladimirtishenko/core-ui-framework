@@ -14,10 +14,7 @@ class TabModule {
 
 		this.$public = $public;
 
-
 		this.props = {...TabModule.defaultProps, ...params};
-
-		console.log(this.props);
 		
 		this.tablist = _$('.'+this.props.tabs);
 		this.tabpanel = _$('.'+this.props.content);
