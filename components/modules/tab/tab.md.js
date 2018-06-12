@@ -1,13 +1,28 @@
 class TabModule {
-	constructor(hide, $public) {
+
+	static defaultProps = {
+		tabs: 'framework-tabs',
+		link: 'framework-tabs__link',
+		content: 'framework-tab-content',
+		tabpanel: 'framework-tabpanel',
+		activeTab: 'framework-active-tab',
+		activeTabPanel: 'framework-tabpanel-active',
+		hide: false
+	}
+
+	constructor(params, $public) {
 
 		this.$public = $public;
-		this.tablist = _$('.framework-tabs');
-		this.tabpanel = _$('.framework-tab-content');
-		this.activeTablist = 'framework-active-tab';
-		this.activeTabpanel = 'framework-tabpanel-active';
 
-		if(hide){
+
+		this.props = {...TabModule.defaultProps, ...params};
+
+		console.log(this.props);
+		
+		this.tablist = _$('.'+this.props.tabs);
+		this.tabpanel = _$('.'+this.props.content);
+
+		if(this.props.hide){
 			this.hideTab();
 		}
 
@@ -28,17 +43,17 @@ class TabModule {
 		if(!event || !event.target) return;
 
 		let target = event.target,
-			attr = target.getAttribute('data-id') || (target.closest('[data-id^="#"]') && target.closest('[data-id^="#"]').getAttribute('data-id')),
+			attr = target.dataset.id || (target.closest('[data-id^="#"]') && target.closest('[data-id^="#"]').dataset.id),
 			tabForActive = _$(attr),
-			activeTablist = _$('.' + this.activeTablist),
-			activeTabpanel = _$('.' + this.activeTabpanel);
+			activeTablist = _$('.' + this.props.activeTab),
+			activeTabpanel = _$('.' + this.props.activeTabPanel);
 
-		if(!target.classList.contains(this.activeTablist) && tabForActive){
-			activeTablist.classList.remove(this.activeTablist)
-			activeTabpanel.classList.remove(this.activeTabpanel)
+		if(!target.classList.contains(this.props.activeTab) && tabForActive){
+			activeTablist.classList.remove(this.props.activeTab)
+			activeTabpanel.classList.remove(this.props.activeTabPanel)
 
-			target.classList.add(this.activeTablist)
-			tabForActive.classList.add(this.activeTabpanel)
+			target.classList.add(this.props.activeTab)
+			tabForActive.classList.add(this.props.activeTabPanel)
 
 		}
 

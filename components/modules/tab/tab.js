@@ -10,12 +10,11 @@ class TabFacade {
 	 * Tab container must have:
 	 * (HTML) .framework-tabs > a.framework-tabs__link(data-id='CONTENT_ID')
 	 * (HTML) .framework-tab-content > div.framework-tabpanel(id='CONTENT_ID')
-	 * Params: 
-	 * 1) hide - if need all show tabs and hide after load  
+	 * Params: {}  
 	 */
 	
-	getTab(hide){
-		new module(hide, this.$public)
+	getTab(option = {}){
+		new module(option, this.$public)
 	}
 }
 
