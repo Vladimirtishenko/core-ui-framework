@@ -12,8 +12,8 @@ class Slider {
 	 * Must have 2 or more block with class .framework-top-slider__item
 	 * Example options: 
 	 *	{
-	 *		top: _$('.framework-top-slider'),
-	 *		wrapper: _$('.framework-top-slider__wrapper'),
+	 *		top: 'framework-top-slider',
+	 *		wrapper: 'framework-top-slider__wrapper',
 	 *		item: 'framework-top-slider__item',
 	 *		controls: 'framework-top-slider__controls',
 	 *		controlsItem: 'framework-top-slider__controls-item',
@@ -23,7 +23,7 @@ class Slider {
 	 */
 	
 
-	getSlider(options){
+	getSlider(options = {}){
 		new module(options, this.$public);
 	}
 }
