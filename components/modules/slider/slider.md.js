@@ -20,13 +20,13 @@ class SliderModule {
 
 	createControls(){
 
-		let span = "",
-			children = _$('.'+this.props.item);
-
-		if(!_$('.' + this.props.top ) || !_$('.' + this.props.wrapper ) || !children) {
-			console.log('There are "top", "wrapper", "controls" not defined in Slider Module');
+		if(!_$('.' + this.props.top ) || !_$('.' + this.props.wrapper ) || !_$('.' + this.props.controls ) || !_$('.'+this.props.item)) {
+			console.log(`There are "top - ${this.props.top}", "wrapper - ${this.props.wrapper}", "controls - ${this.props.controls}" not defined in Slider Module`);
 			return;
 		}
+
+		let span = "",
+			children = _$('.'+this.props.item) instanceof HTMLElement ? [_$('.'+this.props.item)] : _$('.'+this.props.item);
 
 		for (let i = 0; i < children.length; i++) {
 			span += (i == 0) ? 
@@ -34,9 +34,7 @@ class SliderModule {
 						'<span class="'+this.props.controlsItem+'" data-item="'+i+'"></span>';
 		}
 
-		let wrapperControls = '<div class="'+this.props.controls+'">'+span+'</div>';
-
-		this.props.top.insertAdjacentHTML('beforeend', wrapperControls);
+		_$('.' + this.props.controls).insertAdjacentHTML('beforeend', span);
 
 		this.addEvent();
 
