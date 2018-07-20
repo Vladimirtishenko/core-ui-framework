@@ -7,7 +7,8 @@ class TabModule {
 		tabpanel: 'framework-tabpanel',
 		activeTab: 'framework-active-tab',
 		activeTabPanel: 'framework-tabpanel-active',
-		hide: false
+		hide: false,
+		target: true
 	}
 
 	constructor(params, $public) {
@@ -39,7 +40,7 @@ class TabModule {
 
 		if(!event || !event.target) return;
 
-		let target = event.target,
+		let target = this.props.target ? event.target : target.closest('[data-id^="#"]'),
 			attr = target.dataset.id || (target.closest('[data-id^="#"]') && target.closest('[data-id^="#"]').dataset.id),
 			tabForActive = _$(attr),
 			activeTablist = _$('.' + this.props.activeTab),
