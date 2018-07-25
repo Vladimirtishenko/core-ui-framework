@@ -40,7 +40,7 @@ class TabModule {
 
 		if(!event || !event.target) return;
 
-		let target = this.props.target ? event.target : target.closest('[data-id^="#"]'),
+		let target = this.props.target ? event.target : event.target.closest('[data-id^="#"]'),
 			attr = target.dataset.id || (target.closest('[data-id^="#"]') && target.closest('[data-id^="#"]').dataset.id),
 			tabForActive = _$(attr),
 			activeTablist = _$('.' + this.props.activeTab),
