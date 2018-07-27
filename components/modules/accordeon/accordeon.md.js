@@ -54,7 +54,7 @@ class AccordeonModule {
 
 		if(!active) return;
 		
-		let {t, sub, sH, sSH} = this.getNeedVariables(active);
+		let {t, sub, sH, sSH} = ::this.getNeedVariables(active);
 
 		this.closeState(t, sub, sSH, sH)
 
@@ -80,11 +80,10 @@ class AccordeonModule {
 
 	getNeedVariables(target){
 
-		let self = this,
-			variable = {};
+		let variable = {};
 
 			variable.t = target;
-			variable.sub = target.parentNode.querySelector('.' + self.subClass);
+			variable.sub = target.parentNode.querySelector('.' + this.props.subClass);
 			variable.sSH = variable.sub.getAttribute('data-static-width');
 			variable.sH =  variable.sub && variable.sub.firstElementChild.clientHeight;
 
