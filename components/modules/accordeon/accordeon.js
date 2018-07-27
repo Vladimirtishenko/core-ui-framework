@@ -8,16 +8,20 @@ class AccordeonFacade {
 	/**
 	 *
 	 * Required structure
-	 * (HTML) ul.framework-accordeon > elements(li) > .framework-accordeon-link + .framework-accordeon-sub
+	 * (HTML) .framework-accordeon > elements > .framework-accordeon-link + .framework-accordeon-sub
 	 *
 	 * Required params
-	 * wrapElement - wrapper accordeon
-	 * linkClass - class for event click
-	 * subClass - class for hidden content
+		{
+			wrapper: 'framework-accordeon', - wrapper accordeon
+			linkClass: 'framework-accordeon-link', - class for event click
+			subClass: 'framework-accordeon-sub', - class for hidden content
+			active: 'framework-accordeon-open',
+			auto: true
+		}
 	 */
 
-	getAccordeon(wrapElement, linkClass, subClass, auto){
-		return new module(wrapElement, linkClass, subClass, auto, this.$public);
+	getAccordeon(options = {}){
+		return new module(options, this.$public);
 	}
 }
 

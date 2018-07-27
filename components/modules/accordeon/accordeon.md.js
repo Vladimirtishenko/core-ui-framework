@@ -1,11 +1,23 @@
 class AccordeonModule {
-	constructor(wrapElement, linkClass, subClass, auto, $public){
 
-		this.wrapper = wrapElement;
-		this.linkClass = linkClass;
-		this.subClass = subClass;
-		this.active = 'framework-accordeon-open';
-		this.auto = auto;
+	static defaultProps = {
+		wrapper: 'framework-accordeon',
+		linkClass: 'framework-accordeon-link',
+		subClass: 'framework-accordeon-sub',
+		active: 'framework-accordeon-open',
+		auto: true
+	}
+
+
+	constructor(params, $public){
+
+
+		this.props = {...AccordeonModule.defaultProps, ...params};
+
+		this.wrapper = _$('.'+this.props.wrapper)
+
+		if(!this.wrapper) return;
+
 		this.$public = $public;
 
 		this.$public.helper('event').flyEvent('add', ['click'], [this.wrapper], this.generateAccordeon.bind(this))
@@ -15,7 +27,7 @@ class AccordeonModule {
 	}
 
 	generateAccordeon(event){
-		if(!event || !event.target || !event.target.classList.contains(this.linkClass)) return;
+		if(!event || !event.target || !event.target.classList.contains(this.props.linkClass)) return;
 
 		event.stopPropagation && event.stopPropagation();
 
@@ -25,20 +37,20 @@ class AccordeonModule {
 
 		this.transitionEvent = this.transitionEnd.bind(this, sub, sSH);
 
-		if(t.classList.contains(this.active)){
+		if(t.classList.contains(this.props.active)){
 			this.closeState(t, sub, sSH, sH)
 		} else {
 			this.closePrevious();
-			t.classList.add(this.active);
+			t.classList.add(this.props.active);
 			sub.style.cssText += "height: " + (sSH || sH) + "px";
 			this.$public.helper('event').flyEvent('add', ['transitionend'], [sub], this.transitionEvent)
 		}
 	}
 
 	closePrevious(){
-		if(!this.auto) return;
+		if(!this.props.auto) return;
 
-		let active = document.querySelector('.'+this.active);
+		let active = document.querySelector('.'+this.props.active);
 
 		if(!active) return;
 		
@@ -59,7 +71,7 @@ class AccordeonModule {
 
 	closeState(target, sub, sSH, sH){
 
-		target.classList.remove(this.active);
+		target.classList.remove(this.props.active);
 		sub.style.cssText += "height: " + (sSH || sH) + "px";
 		window.getComputedStyle(sub).height;
 		sub.style.cssText += "height: " + 0 + "px";
@@ -104,7 +116,7 @@ class AccordeonModule {
 			return;
 		}
 
-		let target = document.querySelectorAll('.'+this.active);
+		let target = document.querySelectorAll('.'+this.props.active);
 
 		if(target.length < 1) return;
 
