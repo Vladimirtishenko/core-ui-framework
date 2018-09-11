@@ -8,7 +8,9 @@ class ModalModule {
 		close: 'framework-modal',
 		view: true,
 		transition: .5,
-		remove: true
+		remove: true,
+		anywhare: false,
+		overflow: false
 	}
 
 	constructor($public){
@@ -29,16 +31,32 @@ class ModalModule {
 
 		this.$public.helper('transition').openTransition(this.wrapper, 'flex', this.props.transition, 'opacity: 1');
 
+
+		this.overflowAction('set');
 		this.close();
 
 	}
 
-	close(closeButton){
+	overflowAction(action){
 
-		this.$public.helper('event').flyEvent('add', ['click'], [_$('.'+this.props.close)], () => {
+		let methods = {
+			set() {_$('body').style.cssText = 'overflow: hidden'},
+			takeout() {_$('body').style.cssText = 'overflow: initial'}
+		}
+
+		if(this.props.overflow && action)
+			methods[action] && methods[action]();
+
+	}
+
+	close(){
+
+		let close = this.anywhare ? this.wrapper : _$('.'+this.props.close);
+
+		this.$public.helper('event').flyEvent('add', ['click'], [close], () => {
 			this.$public.helper('transition').closeTransition(this.wrapper, 'none', 'opacity: 0', this.props.remove);
+			this.overflowAction('takeout');
 		})
-
 
 	}
 }
