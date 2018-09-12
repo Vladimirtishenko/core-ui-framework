@@ -10,7 +10,8 @@ class ModalModule {
 		transition: .5,
 		remove: true,
 		anywhare: false,
-		overflow: false
+		overflow: false,
+		autoclose: true
 	}
 
 	constructor($public){
@@ -49,9 +50,16 @@ class ModalModule {
 
 	}
 
+	forceClose(){
+		this.$public.helper('transition').closeTransition(this.wrapper, 'none', 'opacity: 0', this.props.remove);
+		this.overflowAction('takeout');
+	}
+
 	close(){
 
-		let close = this.anywhare ? this.wrapper : _$('.'+this.props.close);
+		let close = this.autoclose ? (this.anywhare ? this.wrapper : _$('.'+this.props.close)) : null;
+
+		if(!close) return;
 
 		this.$public.helper('event').flyEvent('add', ['click'], [close], () => {
 			this.$public.helper('transition').closeTransition(this.wrapper, 'none', 'opacity: 0', this.props.remove);

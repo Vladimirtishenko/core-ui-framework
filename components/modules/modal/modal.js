@@ -6,9 +6,9 @@ class Modal {
 
 	/**
 	 *
-	 * Modal consist of only 
+	 * Modal consist of only
 	 *		.framework-modal
-	 *			.framework-modal__content-wrapper 
+	 *			.framework-modal__content-wrapper
 	 *				.framework-modal__close
 	 *				.framework-modal__content
 	 *
@@ -23,7 +23,7 @@ class Modal {
 	}
 
 	closeModal(){
-		modal.close();
+		modal.forceClose();
 	}
 }
 
