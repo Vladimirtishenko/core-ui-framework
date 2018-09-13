@@ -32,8 +32,8 @@ class SliderModule {
 		this.children = _$('.'+this.props.item) instanceof HTMLElement ? [_$('.'+this.props.item)] : _$('.'+this.props.item);
 
 		for (let i = 0; i < this.children.length; i++) {
-			span += (i == 0) ? 
-						'<span class="'+this.props.controlsItemActive+' '+ this.props.controlsItem + ' " data-item="'+i+'">'+i+'</span>' : 
+			span += (i == 0) ?
+						'<span class="'+this.props.controlsItemActive+' '+ this.props.controlsItem + ' " data-item="'+i+'">'+i+'</span>' :
 						'<span class="'+this.props.controlsItem+'" data-item="'+i+'">'+i+'</span>';
 		}
 
@@ -56,7 +56,7 @@ class SliderModule {
 		if(!target.getAttribute('data-item') || target.classList.contains(this.props.controlsItemActive)) return;
 
 		let attr = parseInt(target.getAttribute('data-item')),
-			itemHeight = _$('.'+this.props.wrapper).firstElementChild.clientHeight,
+			itemMove = this.props.directions == 'Y' ? _$('.'+this.props.wrapper).firstElementChild.clientHeight : _$('.'+this.props.wrapper).firstElementChild.clientWidth,
 			active = _$('.' + this.props.controlsItemActive),
 			activeItem = _$('.' + this.props.itemActive);
 
@@ -65,19 +65,19 @@ class SliderModule {
 		target.classList.add(this.props.controlsItemActive);
 
 		switch (this.props.mode) {
-			case 'slide': 
-				_$('.' + this.props.wrapper).style.cssText = "transform: translate"+this.props.directions+"(-"+(attr*itemHeight)+"px)";
+			case 'slide':
+				_$('.' + this.props.wrapper).style.cssText = "transform: translate"+this.props.directions+"(-"+(attr*itemMove)+"px)";
 				break;
-			case 'fade': 
+			case 'fade':
 					activeItem && activeItem.classList.remove(this.props.itemActive);
 					this.children[attr] && this.children[attr].classList.add(this.props.itemActive);
 				break;
-			default: 
+			default:
 				console.log('Property "mode" don`t recognized. Available params "slide" or "fade". Your mode is "' + this.props.mode + '"');
 				break;
 		}
 
-		
+
 
 	}
 }
