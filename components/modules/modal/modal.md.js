@@ -57,7 +57,7 @@ class ModalModule {
 
 	close(){
 
-		let close = this.autoclose ? (this.anywhare ? this.wrapper : _$('.'+this.props.close)) : null;
+		let close = this.props.autoclose ? (this.props.anywhare ? this.wrapper : _$('.'+this.props.close)) : null;
 
 		if(!close) return;
 
