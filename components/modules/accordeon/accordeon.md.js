@@ -1,6 +1,7 @@
 class AccordeonModule {
 
 	static defaultProps = {
+		parent: null,
 		wrapper: 'framework-accordeon',
 		linkClass: 'framework-accordeon-link',
 		subClass: 'framework-accordeon-sub',
@@ -14,7 +15,9 @@ class AccordeonModule {
 
 		this.props = {...AccordeonModule.defaultProps, ...params};
 
-		this.wrapper = _$('.'+this.props.wrapper)
+		this.wrapper = this.props.parent ? _$('.'+this.props.wrapper, _$('.'+this.props.parent)) : _$('.'+this.props.wrapper);
+
+		console.log(this.wrapper);
 
 		if(!this.wrapper) return;
 
@@ -53,7 +56,7 @@ class AccordeonModule {
 		let active = document.querySelector('.'+this.props.active);
 
 		if(!active) return;
-		
+
 		let {t, sub, sH, sSH} = ::this.getNeedVariables(active);
 
 		this.closeState(t, sub, sSH, sH)
@@ -105,10 +108,10 @@ class AccordeonModule {
 	/**
 	 *
 	 * Public method which close all state of accordeon
-	 *  
+	 *
 	 *
 	 */
-	
+
 	__destroy(func){
 		if(func) {
 			func();
@@ -124,7 +127,7 @@ class AccordeonModule {
 			let {t, sub, sH, sSH} = this.getNeedVariables(target[i]);
 
 			this.closeState(t, sub, sSH, sH);
-			
+
 		}
 
 

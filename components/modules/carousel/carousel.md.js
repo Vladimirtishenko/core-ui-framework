@@ -1,8 +1,9 @@
 const MODE = ['circle', 'slide', 'shadow'];
 
 class CarouselModule {
+
 	constructor(options, $public) {
-			
+
 		this.$public = $public;
 
 		this.props = new function() {
@@ -16,7 +17,7 @@ class CarouselModule {
 				this.mode = options.mode;
 				this.speed = options.speed || '.3s';
 				this.controls = {
-					state: options.controls && options.controls.state || false, 
+					state: options.controls && options.controls.state || false,
 					wrap: options.controls && options.controls.wrap || _$('.frame-carousel-dot-controls'),
 					dot: options.controls && options.controls.dot,
 					active: options.controls && options.controls.active
@@ -30,7 +31,7 @@ class CarouselModule {
 		}
 
 		if(
-			!this.props.children || 
+			!this.props.children ||
 			 this.props.children.length < 1 ||
 			!this.props.mode ||
 			!this.props.arrows
@@ -47,13 +48,10 @@ class CarouselModule {
 		switch (mode) {
 
 			case 'slide':
-			case 'circle':
 
 				this.moveSlide();
 				this.previewPresented();
 				this.controlsVisibility();
-
-			case 'slide':
 
 				this.controlsCreate();
 				this.$public.helper('event').flyEvent('add', ['click', ], [this.props.arrows], this.__handlerActionSlide.bind(this));
@@ -62,6 +60,10 @@ class CarouselModule {
 				break;
 
 			case 'circle':
+
+				this.moveSlide();
+				this.previewPresented();
+				this.controlsVisibility();
 
 				this.$public.helper('event').flyEvent('add', ['click'], [this.props.arrows], this.__handlerActionCircle.bind(this));
 
@@ -77,7 +79,7 @@ class CarouselModule {
 				this.$public.helper('event').flyEvent('add', ['click'], [this.props.controls.wrap], this.__controlsHandlerShadow.bind(this));
 				break;
 
-			default: 
+			default:
 				return false;
 		}
 
@@ -87,7 +89,7 @@ class CarouselModule {
 
 		let maxHeight = 0,
 			childrens = [].forEach.call(this.props.children, (item, i)=> {
-					
+
 					if(item.clientHeight > maxHeight){
 						maxHeight = item.offsetHeight;
 					}
@@ -96,19 +98,17 @@ class CarouselModule {
 					} else {
 						item.style.cssText += "position:absolute;";
 					}
-					
+
 				});
 
 
 
 		this.props.list.style.height = maxHeight+'px';
-		
+
 	}
 
 
 	moveSlide(left, time){
-
-		console.log(this.props.list);
 
 		let child = this.props.children,
 			firstChild = Array.from( this.props.children ).shift(),
@@ -135,7 +135,7 @@ class CarouselModule {
 	}
 
 	previewSinteticEvent(src){
-		
+
 		let img = _$('img', this.props.preview);
 		img.src = src;
 
@@ -153,7 +153,7 @@ class CarouselModule {
 	 * Dot controls create and action
 	 *
 	 */
-	
+
 
 	controlsCreate(){
 
@@ -195,7 +195,7 @@ class CarouselModule {
 		this.props.state = parseInt(props.attr);
 
 		this.props.children[this.props.state].style.cssText += "opacity: 1; z-index: 1; transition: .8s";
-		
+
 	}
 
 	__setActiveHandler(el){
@@ -214,7 +214,7 @@ class CarouselModule {
 	 * Handler for 'slide' mode
  	 *
 	 */
-	
+
 
 	__handlerActionSlide(event){
 
@@ -237,11 +237,14 @@ class CarouselModule {
 	 */
 
 	__handlerActionCircle(event){
+
 		if(!event || !event.target || !event.target.getAttribute('data-controls')) return;
 
 		let props = this.getLocalProps(event),
 			cloning,
 			cloned;
+
+
 
 		if(props.attr == 'next'){
 
@@ -277,7 +280,7 @@ class CarouselModule {
 
 		let props = this.getLocalProps(event);
 
-		this.props.children[this.props.state].style.cssText += "opacity: 0; z-index: 0; transition: .8s" 
+		this.props.children[this.props.state].style.cssText += "opacity: 0; z-index: 0; transition: .8s"
 
 		this.calculateState(props.attr);
 
@@ -292,7 +295,7 @@ class CarouselModule {
 		if(event.propertyName == 'transform'){
 				this.moveSlide();
 				this.props.list.removeChild(cloning)
-		
+
 			this.$public.helper('event').flyEvent('remove', ['transitionend'], [this.props.list], this.handlerOffset);
 		}
 	}
