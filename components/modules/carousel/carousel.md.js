@@ -202,19 +202,20 @@ class CarouselModule {
 
 		let controls = _$('.' + this.props.controls.wrap);
 
-		if(this.props.count !== 1 || !this.props.controls.state) return;
+		if(this.props.count == 1 || !this.props.controls.state) return;
 
 		controls.innerHTML = "";
 
 		let dots = ""
 
-		for (let i = 0; i < this.props.list.length; i++) {
+		for (let i = 0; i < this.props.list.children.length; i++) {
+
 			dots += i == 0 ?
 				`<span data-controls="${i}" class="${this.props.controls.dot + ' ' + this.props.controls.active}"></span>` :
 				`<span data-controls="${i}" class="${this.props.controls.dot}"></span>`
 		}
 
-		this.props.controls.wrap.innerHTML = dots;
+		controls.innerHTML = dots;
 
 	}
 
