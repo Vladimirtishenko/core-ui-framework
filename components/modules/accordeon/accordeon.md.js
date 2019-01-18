@@ -17,8 +17,6 @@ class AccordeonModule {
 
 		this.wrapper = this.props.parent ? _$('.'+this.props.wrapper, _$('.'+this.props.parent)) : _$('.'+this.props.wrapper);
 
-		console.log(this.wrapper);
-
 		if(!this.wrapper) return;
 
 		this.$public = $public;
@@ -30,6 +28,8 @@ class AccordeonModule {
 	}
 
 	generateAccordeon(event){
+
+
 		if(!event || !event.target || !event.target.classList.contains(this.props.linkClass)) return;
 
 		event.stopPropagation && event.stopPropagation();
@@ -65,14 +65,17 @@ class AccordeonModule {
 
 	transitionEnd(sub, subStaticHeight, event){
 		if(event.propertyName == "height"){
-			if(!subStaticHeight) {
-				sub.style.cssText += "height: auto";
-			}
 			this.$public.helper('event').flyEvent('remove', ['transitionend'], [sub], this.transitionEvent)
+
+			// if(!subStaticHeight) {
+				// sub.style.cssText += "height: auto";
+			// }			
+			
 		}
 	}
 
 	closeState(target, sub, sSH, sH){
+
 
 		target.classList.remove(this.props.active);
 		sub.style.cssText += "height: " + (sSH || sH) + "px";
@@ -82,6 +85,7 @@ class AccordeonModule {
 	}
 
 	getNeedVariables(target){
+
 
 		let variable = {};
 
@@ -96,6 +100,7 @@ class AccordeonModule {
 
 
 	getAllPublic(){
+
 
 		let self = this;
 
@@ -113,6 +118,9 @@ class AccordeonModule {
 	 */
 
 	__destroy(func){
+
+
+
 		if(func) {
 			func();
 			return;
