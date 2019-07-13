@@ -8,7 +8,10 @@ class TabModule {
 		activeTab: 'framework-active-tab',
 		activeTabPanel: 'framework-tabpanel-active',
 		hide: false,
-		target: true
+		target: true,
+		smooth: true,
+		history: false,
+		onChange: null
 	}
 
 	constructor(params, $public) {
@@ -16,7 +19,7 @@ class TabModule {
 		this.$public = $public;
 
 		this.props = {...TabModule.defaultProps, ...params};
-		
+
 		this.tablist = _$('.'+this.props.tabs);
 		this.tabpanel = _$('.'+this.props.content);
 
@@ -33,27 +36,51 @@ class TabModule {
 		for (var i = this.tabpanel.children.length - 1; i >= 0; i--) {
 			this.tabpanel.children[i].classList.add('framework-tabpanel')
 		}
-		
+
+	}
+
+	onChange(id){
+		const { onChange } = this.props;
+
+		if(onChange) {
+			onChange(id);
+		}
+
 	}
 
 	actionHandler(event){
 
+		event.preventDefault()
+
 		if(!event || !event.target) return;
 
-		let target = this.props.target ? event.target : event.target.closest('[data-id^="#"]'),
-			attr = target.dataset.id || (target.closest('[data-id^="#"]') && target.closest('[data-id^="#"]').dataset.id),
-			tabForActive = _$(attr),
-			activeTablist = _$('.' + this.props.activeTab),
-			activeTabpanel = _$('.' + this.props.activeTabPanel);
+		const { target: elementTarget, activeTab, activeTabPanel, smooth, history} = this.props,
+			  { target: eventTarget } = event,
+				target = elementTarget ? eventTarget : eventTarget.closest('[data-id^="#"]'),
+				attr = target.dataset.id || (target.closest('[data-id^="#"]') && target.closest('[data-id^="#"]').dataset.id),
+				tabForActive = _$(attr),
+				activeTablist = _$('.' + activeTab),
+				activeTabpanel = _$('.' + activeTabPanel);
 
-		if(!target.classList.contains(this.props.activeTab) && tabForActive){
-			activeTablist.classList.remove(this.props.activeTab)
-			activeTabpanel.classList.remove(this.props.activeTabPanel)
+		if(!target.classList.contains(activeTab) && tabForActive){
+			activeTablist.classList.remove(activeTab)
+			activeTabpanel.classList.remove(activeTabPanel)
 
-			target.classList.add(this.props.activeTab)
-			tabForActive.classList.add(this.props.activeTabPanel)
+			target.classList.add(activeTab)
+			tabForActive.classList.add(activeTabPanel)
 
 		}
+
+		if(history) {
+			window.history.pushState({page: attr}, '', location.origin + location.pathname + attr);
+		}
+
+		if(smooth) {
+			const { y } = tabForActive.getBoundingClientRect();
+			window.scrollTo({ top: y - 50, behavior: 'smooth' });
+		}
+
+		this.onChange(attr)
 
 
 	}
