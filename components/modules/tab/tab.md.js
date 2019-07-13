@@ -58,7 +58,7 @@ class TabModule {
 			  { target: eventTarget } = event,
 				target = elementTarget ? eventTarget : eventTarget.closest('[data-id^="#"]'),
 				attr = target.dataset.id || (target.closest('[data-id^="#"]') && target.closest('[data-id^="#"]').dataset.id),
-				tabForActive = _$(attr),
+				tabForActive = _$(attr) || _$(`[data-tab="${attr}"]`),
 				activeTablist = _$('.' + activeTab),
 				activeTabpanel = _$('.' + activeTabPanel);
 
