@@ -50,12 +50,14 @@ class SliderModule {
 
 		this.timeout = setTimeout(() => {
 			const { dataset: { item = 0 } } = this.active,
-					counter = item + 1 > this.children - 1 ? 0 : item + 1;
+					counter = Number(item) + 1 > this.children.length - 1 ? 0 : Number(item) + 1,
 					next = _$(`.${this.props.controlsItem}[data-item="${counter}"]`);
 
+			if(!next) return;
+
 			this.handlerEvent({target: next});
-			this.startActing()
-		}, 4000)
+			this.startActing();
+		}, 5000)
 	}
 
 	autoSlide(event) {
