@@ -9,7 +9,8 @@ class SliderModule {
  		controlsItem: 'framework-top-slider__controls-item',
  		controlsItemActive: 'framework-top-slider__controls-item-active',
  		directions: 'Y',
- 		mode: 'slide' // fade
+ 		mode: 'slide', // fade
+		auto: false
 	}
 
 	constructor(options, $public){
@@ -40,12 +41,42 @@ class SliderModule {
 		_$('.' + this.props.controls).insertAdjacentHTML('beforeend', span);
 
 		this.addEvent();
+		this.props.auto && this.startActing();
 
+	}
+
+	startActing() {
+		this.active = _$(`.${this.props.controlsItemActive}`);
+
+		this.timeout = setTimeout(() => {
+			const { dataset: { item = 0 } } = this.active,
+					counter = item + 1 > this.children - 1 ? 0 : item + 1;
+					next = _$(`.${this.props.controlsItem}[data-item="${counter}"]`);
+
+			this.handlerEvent({target: next});
+			this.startActing()
+		}, 4000)
+	}
+
+	autoSlide(event) {
+		const { type } = event;
+
+		switch (type) {
+			case 'mouseleave':
+				this.startActing();
+				break;
+			case 'mouseenter':
+				clearTimeout(this.timeout);
+				break;
+			default:
+				return true;
+		}
 	}
 
 	addEvent(){
 		let controls = _$('.'+this.props.controls);
 		this.$public.helper('event').flyEvent('add', ['click'], [controls], this.handlerEvent.bind(this));
+		this.$public.helper('event').flyEvent('add', ['mouseenter', 'mouseleave'], [controls], this.autoSlide.bind(this));
 	}
 
 	handlerEvent(event){
@@ -76,8 +107,6 @@ class SliderModule {
 				console.log('Property "mode" don`t recognized. Available params "slide" or "fade". Your mode is "' + this.props.mode + '"');
 				break;
 		}
-
-
 
 	}
 }
