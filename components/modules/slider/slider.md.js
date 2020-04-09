@@ -10,7 +10,8 @@ class SliderModule {
  		controlsItemActive: 'framework-top-slider__controls-item-active',
  		directions: 'Y',
  		mode: 'slide', // fade
-		auto: false
+		auto: false,
+		timer: 6000
 	}
 
 	constructor(options, $public){
@@ -47,6 +48,7 @@ class SliderModule {
 
 	startActing() {
 		this.active = _$(`.${this.props.controlsItemActive}`);
+		const { timer } = this.props;
 
 		this.timeout = setTimeout(() => {
 			const { dataset: { item = 0 } } = this.active,
@@ -57,7 +59,7 @@ class SliderModule {
 
 			this.handlerEvent({target: next});
 			this.startActing();
-		}, 5000)
+		}, timer)
 	}
 
 	autoSlide(event) {
